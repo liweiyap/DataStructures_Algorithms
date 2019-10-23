@@ -1,5 +1,5 @@
 /**
- * Definition of Stack object for simulating CPU processes.
+ * Definition of Stack object.
  */
 
 #ifndef STACK_H

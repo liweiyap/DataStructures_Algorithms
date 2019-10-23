@@ -1,5 +1,5 @@
 /**
- * Definition of Node object, which is a building block of Stack object.
+ * Definition of Node object, which is a building block of Stack and Queue objects.
  */
 
 #ifndef NODE_SQ

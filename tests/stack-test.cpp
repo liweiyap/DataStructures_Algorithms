@@ -44,5 +44,7 @@ int main(){
     std::cout << "s2 is now: "; s2.print();
     std::cout << "\n";
     
+    std::cout << "End of test.\n";
+    
     return 0;
 }  // end of main() function
