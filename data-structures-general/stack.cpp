@@ -12,7 +12,7 @@
  *
  * @return empty Stack
  */
-Stack::Stack(): top(0), n_nodes(0){}
+dsa::Stack::Stack(): top(0), n_nodes(0){}
 
 
 /**
@@ -21,7 +21,7 @@ Stack::Stack(): top(0), n_nodes(0){}
  * @param v integer value for creating new Node object at top of Stack to be created
  * @return Stack with a single Node
  */
-Stack::Stack(int v): top(std::make_shared<Node>(v)), n_nodes(1){}
+dsa::Stack::Stack(int v): top(std::make_shared<Node>(v)), n_nodes(1){}
 
 
 /**
@@ -30,7 +30,7 @@ Stack::Stack(int v): top(std::make_shared<Node>(v)), n_nodes(1){}
  *
  * @param v integer value for creating new Node to be pushed onto Stack
  */
-void Stack::push(int v){
+void dsa::Stack::push(int v){
     std::shared_ptr<Node> node = std::make_shared<Node>(v, top);
     top = node;
     ++n_nodes;
@@ -40,7 +40,7 @@ void Stack::push(int v){
 /**
  * Remove Node from top of Stack. Delete Node.
  */
-void Stack::pop(){
+void dsa::Stack::pop(){
     assert(!isEmpty() && "Error: pop() failed because stack is empty.");
     std::shared_ptr<Node> node = top;
     top = top->next;
@@ -53,7 +53,7 @@ void Stack::pop(){
  *
  * @return integer value stored in top Node of Stack
  */
-int Stack::peek(){
+int dsa::Stack::peek(){
     assert(!isEmpty() && "Error: peek() failed because stack is empty.");
     return top->value;
 }  // end of peek function
@@ -64,7 +64,7 @@ int Stack::peek(){
  *
  * @return number of Nodes in Stack
  */
-int Stack::size(){
+int dsa::Stack::size(){
     return n_nodes;
 }  // end of size function
 
@@ -74,7 +74,7 @@ int Stack::size(){
  *
  * @return boolean value for whether stack is empty
  */
-bool Stack::isEmpty(){
+bool dsa::Stack::isEmpty(){
     return !top;  // return top == 0
 }  // end of isEmpty function
 
@@ -82,7 +82,7 @@ bool Stack::isEmpty(){
 /**
  * Print the value stored in all Nodes to standard output in the correct order.
  */
-void Stack::print(){
+void dsa::Stack::print(){
     std::cout << "[ ";
     std::shared_ptr<Node> node = top;
     while (node){                             // while node != 0
@@ -97,7 +97,7 @@ void Stack::print(){
 /**
  * Remove all Nodes from Stack. Delete all Nodes.
  */
-void Stack::clear(){
+void dsa::Stack::clear(){
     while (!isEmpty()){
         pop();
     }
@@ -107,6 +107,6 @@ void Stack::clear(){
 /**
  * Destructor
  */
-Stack::~Stack(){
+dsa::Stack::~Stack(){
     clear();
 }  // end of destructor

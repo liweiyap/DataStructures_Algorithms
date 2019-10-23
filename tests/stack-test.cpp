@@ -8,7 +8,7 @@ int main(){
     std::cout << "\nTesting implementation of stack...\n\n";
     
     std::cout << "Initialisation of stack s1 with single node...\n";
-    Stack s1(6);
+    dsa::Stack s1(6);
     assert(s1.peek() == 6 && s1.size() == 1 && !s1.isEmpty() && "Error during initialisation with single node.");
     
     std::cout << "Pushing 3 nodes onto stack s1...\n";
@@ -19,7 +19,7 @@ int main(){
     std::cout << "\n";
     
     std::cout << "Initialisation of empty stack s2...\n";
-    Stack s2;
+    dsa::Stack s2;
     assert(s2.size() == 0 && s2.isEmpty() && "Error during initialisation of empty stack.");
     
     std::cout << "Pushing 2 nodes onto stack s2...\n";
