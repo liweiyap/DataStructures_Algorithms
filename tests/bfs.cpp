@@ -1,7 +1,9 @@
 #include <vector>
 #include "queue.hpp"
+#include "std-input-parser.hpp"
+#include <string>  // getline
+#include <sstream>
 
-// TODO: parse unsigned int
 // TODO: assert m <= n(n-1)
 // TODO: throw exception if vertex indices for any edge is out of range
 // TODO: assert vector not empty when printing?
@@ -12,16 +14,6 @@ public:
     Graph(unsigned int n): n_vertices(n){
         // initialise adjacency list as a vector of vectors
         adj_list.resize(n_vertices, std::vector<unsigned int>(0));
-        
-        for (unsigned int idx_vertices = 1; idx_vertices <= n_vertices; ++idx_vertices){
-            /*
-             Let the first entry in each individual vector be the index of the
-             corresponding vertex number itself.
-             This is just for easier visualisation for the user on the standard output.
-             */
-            adj_list[idx_vertices-1].push_back(idx_vertices);
-            
-        }  // end of FOR loop for initialising adjacency list
     }
     
     // add an edge into adjacency list of graph
@@ -29,11 +21,11 @@ public:
     
     // print adjacency list to standard output
     void print_adj_list(){
-        for (auto adj_list_it = adj_list.begin(); adj_list_it != adj_list.end(); ++adj_list_it){
-            for (auto vertex_it = adj_list_it->begin(); vertex_it != adj_list_it->end(); ++vertex_it){
-                std::cout << *vertex_it;
-                if (vertex_it == adj_list_it->begin()) std::cout << ":";
-                std::cout << " ";
+        for (unsigned int adj_list_it = 1; adj_list_it <= n_vertices; ++adj_list_it){
+            // first, print index of vertex for easier visualisation in standard output
+            std::cout << adj_list_it << ": ";
+            for (auto vertex_it = adj_list[adj_list_it-1].begin(); vertex_it != adj_list[adj_list_it-1].end(); ++vertex_it){
+                std::cout << *vertex_it << " ";
             }
             std::cout << "\n";
             
@@ -75,7 +67,8 @@ public:
 };
 
 // run BFS algorithm
-std::vector<int> bfs(Graph& graph, unsigned int source_vertex){
+template<class G>
+std::vector<int> bfs(G& graph, unsigned int source_vertex){
     unsigned int n_vertices = graph.get_n_vertices();
     std::vector<std::vector<unsigned int>> adj_list = graph.get_adj_list();
     
@@ -105,7 +98,7 @@ std::vector<int> bfs(Graph& graph, unsigned int source_vertex){
          initialise vertex iterator as begin()+1, as the first entry is just
          the index of the corresponding vertex number itself
          */
-        for (auto vertex_it = adj_list[discovered_vertex-1].begin()+1; vertex_it != adj_list[discovered_vertex-1].end(); ++vertex_it){
+        for (auto vertex_it = adj_list[discovered_vertex-1].begin(); vertex_it != adj_list[discovered_vertex-1].end(); ++vertex_it){
             if (dist_from_source[*vertex_it-1] == -1){
                 dist_from_source[*vertex_it-1] = dist_from_source[discovered_vertex-1] + 1;
                 queue.enqueue(*vertex_it);
@@ -121,91 +114,111 @@ std::vector<int> bfs(Graph& graph, unsigned int source_vertex){
     return dist_from_source;
 }
 
+int parseDigits(){
+    std::string line;
+    std::getline(std::cin, line);
+    std::istringstream iss(line);
+    int value;
+    if ( !(iss >> value) || !(iss.eof()) ) throw InvalidInput();
+    return value;
+}
+
+unsigned int parseDigitsUnsigned(){
+    int value;
+    value = parseDigits();
+    if (value < 0) throw Underflow();
+    return static_cast<unsigned int>(value);
+}
+
 int main(){
     
-    // /////////////////////////////////////////////////////////////////////////////////
-    // input total number of graphs on which we want to run BFS algorithm
-    // /////////////////////////////////////////////////////////////////////////////////
-    
-    std::cout << "Input number of queries:\n";
-    unsigned int n_queries;
-    std::cin >> n_queries;
-    std::cout << "\nYou have input: " << n_queries << " queries.\n";
-    
-    // /////////////////////////////////////////////////////////////////////////////////
-    // for each graph, iterate the following loop
-    // /////////////////////////////////////////////////////////////////////////////////
-    
-    for (unsigned int idx_queries = 1; idx_queries <= n_queries; ++idx_queries){
-        std::cout << "\n======================================================\n";
-        
+    try {
         // /////////////////////////////////////////////////////////////////////////////
-        // input the number of vertices, followed by the number of edges
+        // input total number of graphs on which we want to run BFS algorithm
         // /////////////////////////////////////////////////////////////////////////////
         
-        std::cout << "For query " << idx_queries << ", input the number of vertices:\n";
-        unsigned int n_vertices;
-        std::cin >> n_vertices;
+        std::cout << "Input number of queries:\n";
+        unsigned int n_queries = parseDigitsUnsigned();
         
-        std::cout << "\nNow, input the number of edges:\n";
-        unsigned int n_edges;
-        std::cin >> n_edges;
-        std::cout << "\nFor query " << idx_queries
-                  << ", you have input " << n_vertices
-                  << " vertices and " << n_edges << " edges.\n\n";
+        std::cout << "\nYou have input: " << n_queries << " queries.\n";
         
         // /////////////////////////////////////////////////////////////////////////////
-        // initialise graph
+        // for each graph, iterate the following loop
         // /////////////////////////////////////////////////////////////////////////////
         
-        Graph_Undirected graph(n_vertices);
-        
-        // input all edges into adjacency list of graph
-        for (unsigned int idx_edges = 1; idx_edges <= n_edges; ++idx_edges){
-            std::cout << "For edge " << idx_edges << ", input both vertices:\n";
-            unsigned int v1;
-            unsigned int v2;
-            std::cin >> v1;
-            std::cin >> v2;
-            std::cout << "You have input vertices " << v1 << " and " << v2 << " for edge " << idx_edges << "...\n\n";
+        for (unsigned int idx_queries = 1; idx_queries <= n_queries; ++idx_queries){
+            std::cout << "\n======================================================\n";
             
-            graph.add_edge(v1, v2);
-        } // end of FOR loop for input edges and filling adjacency list
-        
-        // print adjacency list
-        std::cout << "For query " << idx_queries << ", here is your adjacency list:\n";
-        graph.print_adj_list();
-        
-        // /////////////////////////////////////////////////////////////////////////////
-        // initialise index of vertex to be used as the source for BFS
-        // /////////////////////////////////////////////////////////////////////////////
-        
-        unsigned int source_vertex;
-        std::cout << "\nFinally, input the source vertex:\n";
-        std::cin >> source_vertex;
-        std::cout << "You have chosen vertex " << source_vertex << " as your source.\n\n";
-        
-        // /////////////////////////////////////////////////////////////////////////////
-        // run BFS
-        // /////////////////////////////////////////////////////////////////////////////
-        
-        std::cout << "Starting BFS algorithm:\n";
-        
-        std::vector<int> dist_from_source = bfs(graph, source_vertex);
-        
-        // print output of BFS (distance from source vertex from all other vertices)
-        // if distance is -1 for any vertex, that means it's not connected to source
-        for (unsigned int idx_vertices = 1; idx_vertices <= n_vertices; ++idx_vertices){
-            if (idx_vertices != source_vertex){
-                std::cout << dist_from_source[idx_vertices-1] << " ";
+            // /////////////////////////////////////////////////////////////////////////
+            // input the number of vertices, followed by the number of edges
+            // /////////////////////////////////////////////////////////////////////////
+            
+            std::cout << "For query " << idx_queries << ", input the number of vertices:\n";
+            unsigned int n_vertices = parseDigitsUnsigned();
+            
+            std::cout << "\nNow, input the number of edges:\n";
+            unsigned int n_edges = parseDigitsUnsigned();
+            std::cout << "\nFor query " << idx_queries
+                      << ", you have input " << n_vertices
+                      << " vertices and " << n_edges << " edges.\n\n";
+            
+            // /////////////////////////////////////////////////////////////////////////
+            // initialise graph
+            // /////////////////////////////////////////////////////////////////////////
+            
+            Graph_Undirected graph(n_vertices);
+            
+            // input all edges into adjacency list of graph
+            for (unsigned int idx_edges = 1; idx_edges <= n_edges; ++idx_edges){
+                std::cout << "For edge " << idx_edges << ", input both vertices on separate lines:\n";
+                unsigned int v1 = parseDigitsUnsigned();
+                unsigned int v2 = parseDigitsUnsigned();
+                std::cout << "You have input vertices " << v1 << " and " << v2 << " for edge " << idx_edges << "...\n\n";
+                
+                graph.add_edge(v1, v2);
+            } // end of FOR loop for input edges and filling adjacency list
+            
+            // print adjacency list
+            std::cout << "For query " << idx_queries << ", here is your adjacency list:\n";
+            graph.print_adj_list();
+            
+            // /////////////////////////////////////////////////////////////////////////
+            // initialise index of vertex to be used as the source for BFS
+            // /////////////////////////////////////////////////////////////////////////
+            
+            std::cout << "\nFinally, input the source vertex:\n";
+            unsigned int source_vertex = parseDigitsUnsigned();
+            std::cout << "You have chosen vertex " << source_vertex << " as your source.\n\n";
+            
+            // /////////////////////////////////////////////////////////////////////////
+            // run BFS
+            // /////////////////////////////////////////////////////////////////////////
+            
+            std::cout << "Starting BFS algorithm:\n";
+            
+            std::vector<int> dist_from_source = bfs(graph, source_vertex);
+            
+            // print output of BFS (distance from source vertex from all other vertices)
+            // if distance is -1 for any vertex, that means it's not connected to source
+            for (unsigned int idx_vertices = 1; idx_vertices <= n_vertices; ++idx_vertices){
+                if (idx_vertices != source_vertex){
+                    std::cout << dist_from_source[idx_vertices-1] << " ";
+                }
             }
-        }
-        std::cout << "\nEnd of BFS algorithm.\n";
+            std::cout << "\nEnd of BFS algorithm.\n";
+            
+        }  // end of FOR loop for each graph query
         
-    }  // end of FOR loop for each graph query
-    
-    std::cout << "\n======================================================\n";
-    std::cout << "All queries have been processed.\n\n";
+        std::cout << "\n======================================================\n";
+        std::cout << "All queries have been processed.\n\n";
+        
+    } catch(InvalidInput& error){
+        std::cerr << "ERROR: input must be an integer.\n";
+        return 1;
+    } catch(Underflow& error){
+        std::cerr << "Error: input must be positive.\n";
+        return 1;
+    }
     
     return 0;
 }

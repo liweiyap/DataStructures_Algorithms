@@ -8,3 +8,4 @@ target_link_libraries(queue-test queue)
 
 add_executable(bfs bfs.cpp)
 target_link_libraries(bfs queue)
+target_link_libraries(bfs std-input-parser)
