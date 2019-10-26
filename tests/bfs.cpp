@@ -4,7 +4,6 @@
 // TODO: parse unsigned int
 // TODO: assert m <= n(n-1)
 // TODO: throw exception if vertex indices for any edge is out of range
-// TODO: add templates for stack and queue datatype
 // TODO: assert vector not empty when printing?
 // TODO: check if edge already exists, otherwise no need to push back
 
@@ -87,7 +86,7 @@ std::vector<int> bfs(Graph& graph, unsigned int source_vertex){
     dist_from_source[source_vertex-1] = 0;
     
     // initialise queue and enqueue source vertex
-    dsa::Queue queue;
+    dsa::Queue<unsigned int> queue;
     queue.enqueue(source_vertex);
     
     // queue is not empty as long as all vertices that can be reached from source are discovered

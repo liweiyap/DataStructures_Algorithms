@@ -18,31 +18,32 @@ namespace dsa{
     /**
      * FIFO object used to simulate a virtual CPU.
      */
+    template<typename T>
     class Queue{
     public:
         // Default constructor for empty Queue
         Queue();
         
         
-        // Constructor for Queue containing a single Node to be created for storing integer value
-        Queue(int v);
+        // Constructor for Queue containing a single Node to be created for storing value of datatype T
+        Queue(T v);
         
         
-        // Create new Node storing integer value.
+        // Create new Node storing value of datatype T.
         // Add said Node to end of Queue.
-        void enqueue(int v);
+        void enqueue(T v);
         
         
         // Remove Node from front of Queue. Delete Node.
         void dequeue();
         
         
-        // Return int value stored in Node at the top without removing it from the Queue
-        int peek();
+        // Return value of datatype T stored in Node at the top without removing it from the Queue
+        T peek();
         
         
         // Return total number of Nodes in Queue
-        int size();
+        unsigned int size();
         
         
         // If true, Queue contains 0 Nodes. If false, Queue contains Nodes.
@@ -62,10 +63,10 @@ namespace dsa{
         
         
     private:
-        std::shared_ptr<Node> first;
-        std::shared_ptr<Node> last;
+        std::shared_ptr<Node<T>> first;
+        std::shared_ptr<Node<T>> last;
         
-        int n_nodes;
+        unsigned int n_nodes;
     };  // end of Queue class definition
 
 

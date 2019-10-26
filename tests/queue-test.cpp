@@ -8,7 +8,7 @@ int main(){
     std::cout << "\nTesting implementation of queue...\n\n";
     
     std::cout << "Initialisation of queue q1 with single node...\n";
-    dsa::Queue q1(6);
+    dsa::Queue<int> q1(6);
     assert(q1.peek() == 6 && q1.size() == 1 && !q1.isEmpty() && "Error during initialisation with single node.");
     
     std::cout << "Enqueuing 3 nodes onto queue q1...\n";
@@ -19,7 +19,7 @@ int main(){
     std::cout << "\n";
     
     std::cout << "Initialisation of empty queue q2...\n";
-    dsa::Queue q2;
+    dsa::Queue<int> q2;
     assert(q2.size() == 0 && q2.isEmpty() && "Error during initialisation of empty queue.");
     
     std::cout << "Enqueuing 2 nodes onto queue q2...\n";

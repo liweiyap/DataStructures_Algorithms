@@ -12,27 +12,30 @@
  *
  * @return empty Queue
  */
-dsa::Queue::Queue(): first(0), last(0), n_nodes(0){}
+template <typename T>
+dsa::Queue<T>::Queue(): first(0), last(0), n_nodes(0){}
 
 
 /**
- * Constructor for Queue containing a single Node to be created for storing integer value
+ * Constructor for Queue containing a single Node to be created for storing value of datatype T
  *
- * @param v integer value for creating new Node object at back of Queue that is to be created
+ * @param v value of datatype T for creating new Node object at back of Queue that is to be created
  * @return Queue with a single Node
  */
-dsa::Queue::Queue(int v): first(std::make_shared<Node>(v)), n_nodes(1){
+template<typename T>
+dsa::Queue<T>::Queue(T v): first(std::make_shared<Node<T>>(v)), n_nodes(1){
     last = first;
 }
 
 /**
- * Create new Node storing integer value.
+ * Create new Node storing value of datatype T.
  * Add said Node to Queue.
  *
- * @param v integer value for creating new Node to be pushed onto Queue
+ * @param v value of datatype T for creating new Node to be pushed onto Queue
  */
-void dsa::Queue::enqueue(int v){
-    std::shared_ptr<Node> node = std::make_shared<Node>(v);
+template<typename T>
+void dsa::Queue<T>::enqueue(T v){
+    std::shared_ptr<Node<T>> node = std::make_shared<Node<T>>(v);
     
     if (isEmpty()){
         first = node;
@@ -49,9 +52,10 @@ void dsa::Queue::enqueue(int v){
 /**
  * Remove Node from front of Queue. Delete Node.
  */
-void dsa::Queue::dequeue(){
+template<typename T>
+void dsa::Queue<T>::dequeue(){
     assert(!isEmpty() && "Error: dequeue() failed because queue is empty.");
-    std::shared_ptr<Node> node = first;
+    std::shared_ptr<Node<T>> node = first;
     first = first->next;
     if (first == 0) last = 0;
     --n_nodes;
@@ -59,11 +63,12 @@ void dsa::Queue::dequeue(){
 
 
 /**
- * Return int value stored in Node at the front without removing it from the Queue.
+ * Return value of datatype T stored in Node at the front without removing it from the Queue.
  *
- * @return integer value stored in front Node of Queue
+ * @return value of datatype T stored in front Node of Queue
  */
-int dsa::Queue::peek(){
+template<typename T>
+T dsa::Queue<T>::peek(){
     assert(!isEmpty() && "Error: peek() failed because queue is empty.");
     return first->value;
 }  // end of peek function
@@ -74,7 +79,8 @@ int dsa::Queue::peek(){
  *
  * @return number of Nodes in Queue
  */
-int dsa::Queue::size(){
+template<typename T>
+unsigned int dsa::Queue<T>::size(){
     return n_nodes;
 }  // end of size function
 
@@ -84,7 +90,8 @@ int dsa::Queue::size(){
  *
  * @return boolean value for whether queue is empty
  */
-bool dsa::Queue::isEmpty(){
+template<typename T>
+bool dsa::Queue<T>::isEmpty(){
     return !first && !last;  // return first == 0 && last == 0
 }  // end of isEmpty function
 
@@ -92,9 +99,10 @@ bool dsa::Queue::isEmpty(){
 /**
  * Print the value stored in all Nodes to standard output in the correct order.
  */
-void dsa::Queue::print(){
+template<typename T>
+void dsa::Queue<T>::print(){
     std::cout << "[ ";
-    std::shared_ptr<Node> node = first;
+    std::shared_ptr<Node<T>> node = first;
     while (node){                             // while node != 0
         std::cout << node->value;
         if (node->next) std::cout << " -> ";  // if node->next != 0
@@ -107,7 +115,8 @@ void dsa::Queue::print(){
 /**
  * Remove all Nodes from Queue. Delete all Nodes.
  */
-void dsa::Queue::clear(){
+template<typename T>
+void dsa::Queue<T>::clear(){
     while (!isEmpty()){
         dequeue();
     }
@@ -117,6 +126,12 @@ void dsa::Queue::clear(){
 /**
  * Destructor
  */
-dsa::Queue::~Queue(){
+template<typename T>
+dsa::Queue<T>::~Queue(){
     clear();
 }  // end of destructor
+
+
+// explicit template instantiations
+template class dsa::Queue<int>;
+template class dsa::Queue<unsigned int>;

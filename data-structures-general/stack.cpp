@@ -12,26 +12,29 @@
  *
  * @return empty Stack
  */
-dsa::Stack::Stack(): top(0), n_nodes(0){}
+template<typename T>
+dsa::Stack<T>::Stack(): top(0), n_nodes(0){}
 
 
 /**
- * Constructor for Stack containing a single Node to be created for storing integer value
+ * Constructor for Stack containing a single Node to be created for storing value of datatype T
  *
- * @param v integer value for creating new Node object at top of Stack to be created
+ * @param v value of datatype T for creating new Node object at top of Stack to be created
  * @return Stack with a single Node
  */
-dsa::Stack::Stack(int v): top(std::make_shared<Node>(v)), n_nodes(1){}
+template<typename T>
+dsa::Stack<T>::Stack(T v): top(std::make_shared<Node<T>>(v)), n_nodes(1){}
 
 
 /**
- * Create new Node storing integer value.
+ * Create new Node storing value of datatype T.
  * Add said Node to top of Stack.
  *
- * @param v integer value for creating new Node to be pushed onto Stack
+ * @param v ivalue of datatype T for creating new Node to be pushed onto Stack
  */
-void dsa::Stack::push(int v){
-    std::shared_ptr<Node> node = std::make_shared<Node>(v, top);
+template<typename T>
+void dsa::Stack<T>::push(T v){
+    std::shared_ptr<Node<T>> node = std::make_shared<Node<T>>(v, top);
     top = node;
     ++n_nodes;
 }  // end of push function
@@ -40,20 +43,22 @@ void dsa::Stack::push(int v){
 /**
  * Remove Node from top of Stack. Delete Node.
  */
-void dsa::Stack::pop(){
+template<typename T>
+void dsa::Stack<T>::pop(){
     assert(!isEmpty() && "Error: pop() failed because stack is empty.");
-    std::shared_ptr<Node> node = top;
+    std::shared_ptr<Node<T>> node = top;
     top = top->next;
     --n_nodes;
 }  // end of pop function
 
 
 /**
- * Return int value stored in Node at the top without removing it from the Stack.
+ * Return value of datatype T stored in Node at the top without removing it from the Stack.
  *
- * @return integer value stored in top Node of Stack
+ * @return value of datatype T stored in top Node of Stack
  */
-int dsa::Stack::peek(){
+template<typename T>
+T dsa::Stack<T>::peek(){
     assert(!isEmpty() && "Error: peek() failed because stack is empty.");
     return top->value;
 }  // end of peek function
@@ -64,7 +69,8 @@ int dsa::Stack::peek(){
  *
  * @return number of Nodes in Stack
  */
-int dsa::Stack::size(){
+template<typename T>
+unsigned int dsa::Stack<T>::size(){
     return n_nodes;
 }  // end of size function
 
@@ -74,7 +80,8 @@ int dsa::Stack::size(){
  *
  * @return boolean value for whether stack is empty
  */
-bool dsa::Stack::isEmpty(){
+template<typename T>
+bool dsa::Stack<T>::isEmpty(){
     return !top;  // return top == 0
 }  // end of isEmpty function
 
@@ -82,9 +89,10 @@ bool dsa::Stack::isEmpty(){
 /**
  * Print the value stored in all Nodes to standard output in the correct order.
  */
-void dsa::Stack::print(){
+template<typename T>
+void dsa::Stack<T>::print(){
     std::cout << "[ ";
-    std::shared_ptr<Node> node = top;
+    std::shared_ptr<Node<T>> node = top;
     while (node){                             // while node != 0
         std::cout << node->value;
         if (node->next) std::cout << " -> ";  // if node->next != 0
@@ -97,7 +105,8 @@ void dsa::Stack::print(){
 /**
  * Remove all Nodes from Stack. Delete all Nodes.
  */
-void dsa::Stack::clear(){
+template<typename T>
+void dsa::Stack<T>::clear(){
     while (!isEmpty()){
         pop();
     }
@@ -107,6 +116,11 @@ void dsa::Stack::clear(){
 /**
  * Destructor
  */
-dsa::Stack::~Stack(){
+template<typename T>
+dsa::Stack<T>::~Stack(){
     clear();
 }  // end of destructor
+
+
+// explicit template instantiations
+template class dsa::Stack<int>;
