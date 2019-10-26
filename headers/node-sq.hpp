@@ -2,11 +2,19 @@
  * Definition of Node object, which is a building block of Stack and Queue objects.
  */
 
+// uncomment this block if wishing to debug
+/*
+#ifndef DEBUG_NODE
+#define DEBUG_NODE
+#endif
+ */
+
 #ifndef NODE_SQ
 #define NODE_SQ
 #pragma once
 
 #include <memory>     // shared_ptr
+#include <iostream>
 
 
 namespace dsa{
@@ -25,6 +33,10 @@ namespace dsa{
 
         int value;
         std::shared_ptr<Node> next;
+        
+#ifdef DEBUG_NODE
+        ~Node(){std::cout << "Node " << value << " destroyed.\n";}
+#endif
     };  // end of Node struct definition
 
 }  // end of namespace dsa

@@ -1,0 +1,112 @@
+/**
+ * Definition of Stack object.
+ */
+
+#ifndef STACK_H
+#include "stack.hpp"
+#endif
+
+
+/**
+ * Default constructor for empty Stack.
+ *
+ * @return empty Stack
+ */
+dsa::Stack::Stack(): top(0), n_nodes(0){}
+
+
+/**
+ * Constructor for Stack containing a single Node to be created for storing integer value
+ *
+ * @param v integer value for creating new Node object at top of Stack to be created
+ * @return Stack with a single Node
+ */
+dsa::Stack::Stack(int v): top(std::make_shared<Node>(v)), n_nodes(1){}
+
+
+/**
+ * Create new Node storing integer value.
+ * Add said Node to top of Stack.
+ *
+ * @param v integer value for creating new Node to be pushed onto Stack
+ */
+void dsa::Stack::push(int v){
+    std::shared_ptr<Node> node = std::make_shared<Node>(v, top);
+    top = node;
+    ++n_nodes;
+}  // end of push function
+
+
+/**
+ * Remove Node from top of Stack. Delete Node.
+ */
+void dsa::Stack::pop(){
+    assert(!isEmpty() && "Error: pop() failed because stack is empty.");
+    std::shared_ptr<Node> node = top;
+    top = top->next;
+    --n_nodes;
+}  // end of pop function
+
+
+/**
+ * Return int value stored in Node at the top without removing it from the Stack.
+ *
+ * @return integer value stored in top Node of Stack
+ */
+int dsa::Stack::peek(){
+    assert(!isEmpty() && "Error: peek() failed because stack is empty.");
+    return top->value;
+}  // end of peek function
+
+
+/**
+ * Return total number of Nodes in Stack.
+ *
+ * @return number of Nodes in Stack
+ */
+int dsa::Stack::size(){
+    return n_nodes;
+}  // end of size function
+
+
+/**
+ * If true, Stack contains 0 Nodes. If false, Stack contains Nodes.
+ *
+ * @return boolean value for whether stack is empty
+ */
+bool dsa::Stack::isEmpty(){
+    return !top;  // return top == 0
+}  // end of isEmpty function
+
+
+/**
+ * Print the value stored in all Nodes to standard output in the correct order.
+ */
+void dsa::Stack::print(){
+    std::cout << "[ ";
+    std::shared_ptr<Node> node = top;
+    while (node){                             // while node != 0
+        std::cout << node->value;
+        if (node->next) std::cout << " -> ";  // if node->next != 0
+        node = node->next;
+    }
+    std::cout << " ]\n";
+}  // end of print function
+
+
+/**
+ * Remove all Nodes from Stack. Delete all Nodes.
+ */
+void dsa::Stack::clear(){
+    while (!isEmpty()){
+        pop();
+    }
+}  // end of clear function
+
+
+/**
+ * Destructor
+ */
+dsa::Stack::~Stack(){
+    clear();
+}  // end of destructor

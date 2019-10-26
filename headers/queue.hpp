@@ -10,7 +10,6 @@
 #include "node-sq.hpp"
 #endif
 
-#include <iostream>
 #include <cassert>
 
 
