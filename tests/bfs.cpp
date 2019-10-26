@@ -4,14 +4,13 @@
 // TODO: parse unsigned int
 // TODO: assert m <= n(n-1)
 // TODO: throw exception if vertex indices for any edge is out of range
-// TODO: add inheritance from Graph to Graph_Directed or Graph_Undirected
 // TODO: add templates for stack and queue datatype
 // TODO: assert vector not empty when printing?
 // TODO: check if edge already exists, otherwise no need to push back
 
 class Graph{
 public:
-    Graph(int n): n_vertices(n){
+    Graph(unsigned int n): n_vertices(n){
         // initialise adjacency list as a vector of vectors
         adj_list.resize(n_vertices, std::vector<unsigned int>(0));
         
@@ -27,10 +26,7 @@ public:
     }
     
     // add an edge into adjacency list of graph
-    void add_edge(unsigned int v1, unsigned int v2){
-        adj_list[v1-1].push_back(v2);
-        adj_list[v2-1].push_back(v1);  // only if graph is undirected
-    }
+    virtual void add_edge(unsigned int v1, unsigned int v2) = 0;
     
     // print adjacency list to standard output
     void print_adj_list(){
@@ -53,9 +49,30 @@ public:
         return adj_list;
     }
     
-private:
+protected:
     unsigned int n_vertices;
     std::vector<std::vector<unsigned int>> adj_list;
+};
+
+class Graph_Undirected : public Graph{
+public:
+    Graph_Undirected(unsigned int n): Graph(n){}
+    
+    // add an edge into adjacency list of graph
+    void add_edge(unsigned int v1, unsigned int v2){
+        adj_list[v1-1].push_back(v2);
+        adj_list[v2-1].push_back(v1);
+    }
+};
+
+class Graph_Directed : public Graph{
+public:
+    Graph_Directed(unsigned int n): Graph(n){}
+    
+    // add an edge into adjacency list of graph
+    void add_edge(unsigned int v1, unsigned int v2){
+        adj_list[v1-1].push_back(v2);
+    }
 };
 
 // run BFS algorithm
@@ -142,7 +159,7 @@ int main(){
         // initialise graph
         // /////////////////////////////////////////////////////////////////////////////
         
-        Graph graph(n_vertices);
+        Graph_Undirected graph(n_vertices);
         
         // input all edges into adjacency list of graph
         for (unsigned int idx_edges = 1; idx_edges <= n_edges; ++idx_edges){
