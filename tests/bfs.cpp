@@ -3,11 +3,8 @@
 #include "std-input-parser.hpp"
 #include <string>  // getline
 #include <sstream>
-
-// TODO: assert m <= n(n-1)
-// TODO: throw exception if vertex indices for any edge is out of range
-// TODO: assert vector not empty when printing?
-// TODO: check if edge already exists, otherwise no need to push back
+#include <cassert>
+#include <limits>
 
 class Graph{
 public:
@@ -51,6 +48,10 @@ public:
     
     // add an edge into adjacency list of graph
     void add_edge(unsigned int v1, unsigned int v2){
+        if (v1 < 1 || v1 > n_vertices) throw OutOfRange();
+        if (v2 < 1 || v2 > n_vertices) throw OutOfRange();
+        assert ( std::none_of(adj_list[v1-1].begin(), adj_list[v1-1].end(), [v2](unsigned int i){ return i == v2; }) && "Edge already exists. No self-loops allowed.");
+        assert ( std::none_of(adj_list[v2-1].begin(), adj_list[v2-1].end(), [v1](unsigned int i){ return i == v1; }) && "Edge already exists. No self-loops allowed.");
         adj_list[v1-1].push_back(v2);
         adj_list[v2-1].push_back(v1);
     }
@@ -62,6 +63,9 @@ public:
     
     // add an edge into adjacency list of graph
     void add_edge(unsigned int v1, unsigned int v2){
+        if (v1 < 1 || v1 > n_vertices) throw OutOfRange();
+        if (v2 < 1 || v2 > n_vertices) throw OutOfRange();
+        assert ( std::none_of(adj_list[v1-1].begin(), adj_list[v1-1].end(), [v2](unsigned int i){ return i == v2; }) && "Edge already exists. No self-loops allowed.");
         adj_list[v1-1].push_back(v2);
     }
 };
@@ -71,6 +75,8 @@ template<class G>
 std::vector<int> bfs(G& graph, unsigned int source_vertex){
     unsigned int n_vertices = graph.get_n_vertices();
     std::vector<std::vector<unsigned int>> adj_list = graph.get_adj_list();
+    
+    if (source_vertex < 1 || source_vertex > n_vertices) throw OutOfRange();
     
     // if vertex has not been visited, then let the distance to source vertex be -1.
     std::vector<int> dist_from_source(n_vertices, -1);
@@ -92,11 +98,8 @@ std::vector<int> bfs(G& graph, unsigned int source_vertex){
          for all neighbours of dequeued/discovered vertex that are directly
          connected by an edge, check if neighbour has already been
          discovered/visited before.
-         
+
          if not already discovered, then update its distance accordingly. Enqueue.
-         
-         initialise vertex iterator as begin()+1, as the first entry is just
-         the index of the corresponding vertex number itself
          */
         for (auto vertex_it = adj_list[discovered_vertex-1].begin(); vertex_it != adj_list[discovered_vertex-1].end(); ++vertex_it){
             if (dist_from_source[*vertex_it-1] == -1){
@@ -118,9 +121,11 @@ int parseDigits(){
     std::string line;
     std::getline(std::cin, line);
     std::istringstream iss(line);
-    int value;
+    long value;
     if ( !(iss >> value) || !(iss.eof()) ) throw InvalidInput();
-    return value;
+    if ( value > std::numeric_limits<int>::max() ) throw Overflow();
+    if ( value < std::numeric_limits<int>::min() ) throw Underflow();
+    return static_cast<long>(value);
 }
 
 unsigned int parseDigitsUnsigned(){
@@ -131,7 +136,7 @@ unsigned int parseDigitsUnsigned(){
 }
 
 int main(){
-    
+    unsigned int n_vertices;
     try {
         // /////////////////////////////////////////////////////////////////////////////
         // input total number of graphs on which we want to run BFS algorithm
@@ -154,10 +159,11 @@ int main(){
             // /////////////////////////////////////////////////////////////////////////
             
             std::cout << "For query " << idx_queries << ", input the number of vertices:\n";
-            unsigned int n_vertices = parseDigitsUnsigned();
+            n_vertices = parseDigitsUnsigned();
             
             std::cout << "\nNow, input the number of edges:\n";
             unsigned int n_edges = parseDigitsUnsigned();
+            assert(n_edges <= n_vertices*(n_vertices-1)/2 && "ERROR: maximum n_edges is n_vertices choose 2");
             std::cout << "\nFor query " << idx_queries
                       << ", you have input " << n_vertices
                       << " vertices and " << n_edges << " edges.\n\n";
@@ -179,8 +185,10 @@ int main(){
             } // end of FOR loop for input edges and filling adjacency list
             
             // print adjacency list
-            std::cout << "For query " << idx_queries << ", here is your adjacency list:\n";
-            graph.print_adj_list();
+            if (n_vertices > 0){
+                std::cout << "For query " << idx_queries << ", here is your adjacency list:\n";
+                graph.print_adj_list();
+            }
             
             // /////////////////////////////////////////////////////////////////////////
             // initialise index of vertex to be used as the source for BFS
@@ -215,8 +223,14 @@ int main(){
     } catch(InvalidInput& error){
         std::cerr << "ERROR: input must be an integer.\n";
         return 1;
+    } catch(Overflow& error){
+        std::cerr << "Error: input must be smaller than INT_MAX.\n";
+        return 1;
     } catch(Underflow& error){
         std::cerr << "Error: input must be positive.\n";
+        return 1;
+    } catch(OutOfRange& error){
+        std::cerr << "Error: vertex index is not in the range of 1 to " << n_vertices << ".\n";
         return 1;
     }
     

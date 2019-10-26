@@ -10,5 +10,6 @@ class MyException{};
 class InvalidInput: public MyException{};
 class Overflow: public MyException{};
 class Underflow: public MyException{};
+class OutOfRange: public MyException{};
 
 #endif
