@@ -1,10 +1,97 @@
-#include <iostream>
 #include <vector>
 #include "queue.hpp"
 
 // TODO: parse unsigned int
 // TODO: assert m <= n(n-1)
 // TODO: throw exception if vertex indices for any edge is out of range
+// TODO: add inheritance from Graph to Graph_Directed or Graph_Undirected
+// TODO: add templates for stack and queue datatype
+// TODO: assert vector not empty when printing?
+
+class Graph{
+public:
+    Graph(int n): n_vertices(n){
+        // initialise adjacency list as a vector of vectors
+        adj_list.resize(n_vertices, std::vector<unsigned int>(0));
+        
+        for (unsigned int idx_vertices = 1; idx_vertices <= n_vertices; ++idx_vertices){
+            /*
+             Let the first entry in each individual vector be the index of the
+             corresponding vertex number itself.
+             This is just for easier visualisation for the user on the standard output.
+             */
+            adj_list[idx_vertices-1].push_back(idx_vertices);
+            
+        }  // end of FOR loop for initialising adjacency list
+    }
+    
+    // add an into adjacency list of graph
+    void add_edge(unsigned int v1, unsigned int v2){
+        adj_list[v1-1].push_back(v2);
+        adj_list[v2-1].push_back(v1);  // only if graph is undirected
+    }
+    
+    // run BFS algorithm
+    std::vector<int> bfs(unsigned int source_vertex){
+        // if vertex has not been visited, then let the distance to source vertex be -1.
+        std::vector<int> dist_from_source(n_vertices, -1);
+        
+        // the source vertex itself has a distance of 0
+        dist_from_source[source_vertex-1] = 0;
+        
+        // initialise queue and enqueue source vertex
+        dsa::Queue queue;
+        queue.enqueue(source_vertex);
+        
+        // queue is not empty as long as all vertices that can be reached from source are discovered
+        while (!queue.isEmpty()){
+            // dequeue the vertex at the front of the queue
+            unsigned int discovered_vertex = queue.peek();
+            queue.dequeue();
+            
+            /*
+             for all neighbours of dequeued/discovered vertex that are directly
+             connected by an edge, check if neighbour has already been
+             discovered/visited before.
+             
+             if not already discovered, then update its distance accordingly. Enqueue.
+             
+             initialise vertex iterator as begin()+1, as the first entry is just
+             the index of the corresponding vertex number itself
+             */
+            for (auto vertex_it = adj_list[discovered_vertex-1].begin()+1; vertex_it != adj_list[discovered_vertex-1].end(); ++vertex_it){
+                if (dist_from_source[*vertex_it-1] == -1){
+                    dist_from_source[*vertex_it-1] = dist_from_source[discovered_vertex-1] + 1;
+                    queue.enqueue(*vertex_it);
+                    
+                }  // end of IF statement for checking if directly connected vertex has already been discovered before
+                
+            }  // end of FOR loop for iterating through all directly connected vertices in the adjacency list
+            
+        }  // end of WHILE loop for checking whether all vertices that can be reached from source have been discovered
+        
+        // return output of BFS (distance from source vertex from all other vertices)
+        // if a given vertex is not connected to source vertex, its distance remains -1.
+        return dist_from_source;
+    }
+    
+    // print adjacency list to standard output
+    void print_adj_list(){
+        for (auto adj_list_it = adj_list.begin(); adj_list_it != adj_list.end(); ++adj_list_it){
+            for (auto vertex_it = adj_list_it->begin(); vertex_it != adj_list_it->end(); ++vertex_it){
+                std::cout << *vertex_it;
+                if (vertex_it == adj_list_it->begin()) std::cout << ":";
+                std::cout << " ";
+            }
+            std::cout << "\n";
+            
+        }  // end of FOR loop for printing adjacency list
+    }
+    
+private:
+    unsigned int n_vertices;
+    std::vector<std::vector<unsigned int>> adj_list;
+};
 
 int main(){
     
@@ -40,19 +127,12 @@ int main(){
                   << " vertices and " << n_edges << " edges.\n\n";
         
         // /////////////////////////////////////////////////////////////////////////////
-        // initialise adjacency list as a vector of vectors
+        // initialise graph
         // /////////////////////////////////////////////////////////////////////////////
         
-        std::vector<std::vector<unsigned int>> adj_list(n_vertices);
-        for (unsigned int idx_vertices = 1; idx_vertices <= n_vertices; ++idx_vertices){
-            // let the first entry in each individual vector be the index of the corresponding vertex number itself
-            // this is just for easier visualisation for the user on the standard output
-            adj_list[idx_vertices-1].push_back(idx_vertices);
-            
-        }  // end of FOR loop for initialising adjacency list
+        Graph graph(n_vertices);
         
-        // input all edges
-        // fill adjacency list
+        // input all edges into adjacency list of graph
         for (unsigned int idx_edges = 1; idx_edges <= n_edges; ++idx_edges){
             std::cout << "For edge " << idx_edges << ", input both vertices:\n";
             unsigned int v1;
@@ -61,22 +141,12 @@ int main(){
             std::cin >> v2;
             std::cout << "You have input vertices " << v1 << " and " << v2 << " for edge " << idx_edges << "...\n\n";
             
-            adj_list[v1-1].push_back(v2);
-            adj_list[v2-1].push_back(v1);  // only if graph is undirected
-            
+            graph.add_edge(v1, v2);
         } // end of FOR loop for input edges and filling adjacency list
         
         // print adjacency list
         std::cout << "For query " << idx_queries << ", here is your adjacency list:\n";
-        for (auto adj_list_it = adj_list.begin(); adj_list_it != adj_list.end(); ++adj_list_it){
-            for (auto vertex_it = adj_list_it->begin(); vertex_it != adj_list_it->end(); ++vertex_it){
-                std::cout << *vertex_it;
-                if (vertex_it == adj_list_it->begin()) std::cout << ":";
-                std::cout << " ";
-            }
-            std::cout << "\n";
-            
-        }  // end of FOR loop for printing adjacency list
+        graph.print_adj_list();
         
         // /////////////////////////////////////////////////////////////////////////////
         // initialise index of vertex to be used as the source for BFS
@@ -93,45 +163,13 @@ int main(){
         
         std::cout << "Starting BFS algorithm:\n";
         
-        // if vertex has not been visited, then let the distance to source vertex be -1.
-        std::vector<int> graph(n_vertices, -1);
-        
-        // the source vertex itself has a distance of 0
-        graph[source_vertex-1] = 0;
-        
-        // initialise queue and enqueue source vertex
-        dsa::Queue queue;
-        queue.enqueue(source_vertex);
-        
-        // queue is not empty as long as all vertices that can be reached from source are discovered
-        while (!queue.isEmpty()){
-            // dequeue the vertex at the front of the queue
-            unsigned int discovered_vertex = queue.peek();
-            queue.dequeue();
-            
-            /*
-             for all neighbours of dequeued/discovered vertex that are directly
-             connected by an edge, check if neighbour has already been
-             discovered/visited before.
-             
-             if not already discovered, then adjust its distance accordingly. Enqueue.
-             */
-            for (auto vertex_it = adj_list[discovered_vertex-1].begin()+1; vertex_it != adj_list[discovered_vertex-1].end(); ++vertex_it){
-                if (graph[*vertex_it-1] == -1){
-                    graph[*vertex_it-1] = graph[discovered_vertex-1] + 6;
-                    queue.enqueue(*vertex_it);
-                    
-                }  // end of IF statement for checking if directly connected vertex has already been discovered before
-                
-            }  // end of FOR loop for iterating through all directly connected vertices in the adjacency list
-            
-        }  // end of WHILE loop for checking whether all vertices that can be reached from source have been discovered
+        std::vector<int> dist_from_source = graph.bfs(source_vertex);
         
         // print output of BFS (distance from source vertex from all other vertices)
-        // if not connected to source vertex, distance remains -1.
+        // if distance is -1 for any vertex, that means it's not connected to source
         for (unsigned int idx_vertices = 1; idx_vertices <= n_vertices; ++idx_vertices){
             if (idx_vertices != source_vertex){
-                std::cout << graph[idx_vertices-1] << " ";
+                std::cout << dist_from_source[idx_vertices-1] << " ";
             }
         }
         std::cout << "\nEnd of BFS algorithm.\n";
