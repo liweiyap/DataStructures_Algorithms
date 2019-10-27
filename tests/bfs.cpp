@@ -1,10 +1,7 @@
 #include <vector>
 #include "queue.hpp"
 #include "std-input-parser.hpp"
-#include <string>  // getline
-#include <sstream>
-#include <cassert>
-#include <limits>
+#include <algorithm>  // none_of
 
 class Graph{
 public:
@@ -71,8 +68,7 @@ public:
 };
 
 // run BFS algorithm
-template<class G>
-std::vector<int> bfs(G& graph, unsigned int source_vertex){
+std::vector<int> bfs(Graph& graph, unsigned int source_vertex){
     unsigned int n_vertices = graph.get_n_vertices();
     std::vector<std::vector<unsigned int>> adj_list = graph.get_adj_list();
     
@@ -117,24 +113,6 @@ std::vector<int> bfs(G& graph, unsigned int source_vertex){
     return dist_from_source;
 }
 
-int parseDigits(){
-    std::string line;
-    std::getline(std::cin, line);
-    std::istringstream iss(line);
-    long value;
-    if ( !(iss >> value) || !(iss.eof()) ) throw InvalidInput();
-    if ( value > std::numeric_limits<int>::max() ) throw Overflow();
-    if ( value < std::numeric_limits<int>::min() ) throw Underflow();
-    return static_cast<long>(value);
-}
-
-unsigned int parseDigitsUnsigned(){
-    int value;
-    value = parseDigits();
-    if (value < 0) throw Underflow();
-    return static_cast<unsigned int>(value);
-}
-
 int main(){
     unsigned int n_vertices;
     try {
@@ -143,7 +121,7 @@ int main(){
         // /////////////////////////////////////////////////////////////////////////////
         
         std::cout << "Input number of queries:\n";
-        unsigned int n_queries = parseDigitsUnsigned();
+        unsigned int n_queries = dsa::parseDigitsUnsigned();
         
         std::cout << "\nYou have input: " << n_queries << " queries.\n";
         
@@ -159,10 +137,10 @@ int main(){
             // /////////////////////////////////////////////////////////////////////////
             
             std::cout << "For query " << idx_queries << ", input the number of vertices:\n";
-            n_vertices = parseDigitsUnsigned();
+            n_vertices = dsa::parseDigitsUnsigned();
             
             std::cout << "\nNow, input the number of edges:\n";
-            unsigned int n_edges = parseDigitsUnsigned();
+            unsigned int n_edges = dsa::parseDigitsUnsigned();
             assert(n_edges <= n_vertices*(n_vertices-1)/2 && "ERROR: maximum n_edges is n_vertices choose 2");
             std::cout << "\nFor query " << idx_queries
                       << ", you have input " << n_vertices
@@ -177,8 +155,8 @@ int main(){
             // input all edges into adjacency list of graph
             for (unsigned int idx_edges = 1; idx_edges <= n_edges; ++idx_edges){
                 std::cout << "For edge " << idx_edges << ", input both vertices on separate lines:\n";
-                unsigned int v1 = parseDigitsUnsigned();
-                unsigned int v2 = parseDigitsUnsigned();
+                unsigned int v1 = dsa::parseDigitsUnsigned();
+                unsigned int v2 = dsa::parseDigitsUnsigned();
                 std::cout << "You have input vertices " << v1 << " and " << v2 << " for edge " << idx_edges << "...\n\n";
                 
                 graph.add_edge(v1, v2);
@@ -195,7 +173,7 @@ int main(){
             // /////////////////////////////////////////////////////////////////////////
             
             std::cout << "\nFinally, input the source vertex:\n";
-            unsigned int source_vertex = parseDigitsUnsigned();
+            unsigned int source_vertex = dsa::parseDigitsUnsigned();
             std::cout << "You have chosen vertex " << source_vertex << " as your source.\n\n";
             
             // /////////////////////////////////////////////////////////////////////////

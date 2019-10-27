@@ -15,25 +15,36 @@
 
 
 /**
- * converts an array of characters between '0' and '9' inclusive to a single positive integer
+ * retrieves a line from standard input, streams it to a string stream, and converts value in line to integer
  *
- * @param text pointer to char between '0' and '9' inclusive
- * @return single integer value converted from array of char
- * @throws InvalidInput() exception thrown if none of the characters is between '0' and '9' inclusive
+ * @return single integer value parsed from standard input
+ * @throws InvalidInput() exception thrown if some of the characters are not digits
  * @throws Overflow() exception thrown if integer is greater than INT_MAX
+ * @throws Underflow() exception thrown if integer is smaller than INT_MIN
  */
-unsigned int ConvertCharToPositiveInt(const char* text){
-    int number = 0;
-    
-    for (int i = 0; i < strlen(text); ++i){
-        if (!isdigit(text[i])) throw InvalidInput();
-        
-        if (number > std::numeric_limits<int>::max() / 10) throw Overflow();
-        number *= 10;
-        
-        if (number > std::numeric_limits<int>::max() - (text[i] - '0')) throw Overflow();
-        number += (text[i] - '0');
-    }
-    
-    return number;
+int dsa::parseDigits(){
+    std::string line;
+    std::getline(std::cin, line);
+    std::istringstream iss(line);
+    long value;
+    if ( !(iss >> value) || !(iss.eof()) ) throw InvalidInput();
+    if ( value > std::numeric_limits<int>::max() ) throw Overflow();
+    if ( value < std::numeric_limits<int>::min() ) throw Underflow();
+    return static_cast<int>(value);
+}  // end of funtion
+
+
+/**
+ * retrieves a line from standard input, streams it to a string stream, and converts value in line to unsigned integer
+ *
+ * @return single unsigned integer value parsed from standard input
+ * @throws InvalidInput() exception thrown if some of the characters are not digits
+ * @throws Overflow() exception thrown if integer is greater than INT_MAX
+ * @throws Underflow() exception thrown if integer is smaller than 0
+ */
+unsigned int dsa::parseDigitsUnsigned(){
+    int value;
+    value = parseDigits();
+    if (value < 0) throw Underflow();
+    return static_cast<unsigned int>(value);
 }  // end of function

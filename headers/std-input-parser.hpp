@@ -12,17 +12,32 @@
 
 #include <iostream>
 #include <limits>    // numeric_limits
+#include <string>    // getline
+#include <sstream>
 
 
-/**
- * converts an array of characters between '0' and '9' inclusive to a single positive integer
- *
- * @param text pointer to char between '0' and '9' inclusive
- * @return single integer value converted from array of char
- * @throws InvalidInput() exception thrown if none of the characters is between '0' and '9' inclusive
- * @throws Overflow() exception thrown if integer is greater than INT_MAX
- */
-unsigned int ConvertCharToPositiveInt(const char* text);
+namespace dsa{
+
+    /**
+     * retrieves a line from standard input, streams it to a string stream, and converts value in line to integer
+     *
+     * @return single integer value parsed from standard input
+     * @throws InvalidInput() exception thrown if some of the characters are not digits
+     * @throws Overflow() exception thrown if integer is greater than INT_MAX
+     * @throws Underflow() exception thrown if integer is smaller than INT_MIN
+     */
+    int parseDigits();
+    
+    /**
+     * retrieves a line from standard input, streams it to a string stream, and converts value in line to unsigned integer
+     *
+     * @return single unsigned integer value parsed from standard input
+     * @throws InvalidInput() exception thrown if some of the characters are not digits
+     * @throws Overflow() exception thrown if integer is greater than INT_MAX
+     * @throws Underflow() exception thrown if integer is smaller than 0
+     */
+    unsigned int parseDigitsUnsigned();
+}
 
 
 #endif
