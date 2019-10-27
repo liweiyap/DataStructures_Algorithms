@@ -1,5 +1,5 @@
 /**
- * Declaration of Graph base and derived classes..
+ * Declaration of Graph base and derived classes.
  */
 
 #ifndef GRAPH_H
@@ -13,7 +13,7 @@
 #include <vector>
 #include <iostream>
 #include <cassert>
-
+#include <algorithm>  // none_of
 
 
 namespace dsa{

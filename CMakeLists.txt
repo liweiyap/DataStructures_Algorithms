@@ -5,6 +5,8 @@ set(CMAKE_CXX_STANDARD 11)
 
 add_subdirectory(data-structures-general)
 
+add_subdirectory(algorithms-graphs)
+
 add_subdirectory(include)
 
 add_subdirectory(tests)
