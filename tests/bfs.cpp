@@ -1,74 +1,10 @@
-#include <vector>
 #include "queue.hpp"
 #include "std-input-parser.hpp"
+#include "graph.hpp"
 #include <algorithm>  // none_of
 
-class Graph{
-public:
-    Graph(unsigned int n): n_vertices(n){
-        // initialise adjacency list as a vector of vectors
-        adj_list.resize(n_vertices, std::vector<unsigned int>(0));
-    }
-    
-    // add an edge into adjacency list of graph
-    virtual void add_edge(unsigned int v1, unsigned int v2) = 0;
-    
-    // print adjacency list to standard output
-    void print_adj_list(){
-        for (unsigned int adj_list_it = 1; adj_list_it <= n_vertices; ++adj_list_it){
-            // first, print index of vertex for easier visualisation in standard output
-            std::cout << adj_list_it << ": ";
-            for (auto vertex_it = adj_list[adj_list_it-1].begin(); vertex_it != adj_list[adj_list_it-1].end(); ++vertex_it){
-                std::cout << *vertex_it << " ";
-            }
-            std::cout << "\n";
-            
-        }  // end of FOR loop for printing adjacency list
-    }
-    
-    unsigned int get_n_vertices(){
-        return n_vertices;
-    }
-    
-    std::vector<std::vector<unsigned int>> get_adj_list(){
-        return adj_list;
-    }
-    
-protected:
-    unsigned int n_vertices;
-    std::vector<std::vector<unsigned int>> adj_list;
-};
-
-class Graph_Undirected : public Graph{
-public:
-    Graph_Undirected(unsigned int n): Graph(n){}
-    
-    // add an edge into adjacency list of graph
-    void add_edge(unsigned int v1, unsigned int v2){
-        if (v1 < 1 || v1 > n_vertices) throw OutOfRange();
-        if (v2 < 1 || v2 > n_vertices) throw OutOfRange();
-        assert ( std::none_of(adj_list[v1-1].begin(), adj_list[v1-1].end(), [v2](unsigned int i){ return i == v2; }) && "Edge already exists. No self-loops allowed.");
-        assert ( std::none_of(adj_list[v2-1].begin(), adj_list[v2-1].end(), [v1](unsigned int i){ return i == v1; }) && "Edge already exists. No self-loops allowed.");
-        adj_list[v1-1].push_back(v2);
-        adj_list[v2-1].push_back(v1);
-    }
-};
-
-class Graph_Directed : public Graph{
-public:
-    Graph_Directed(unsigned int n): Graph(n){}
-    
-    // add an edge into adjacency list of graph
-    void add_edge(unsigned int v1, unsigned int v2){
-        if (v1 < 1 || v1 > n_vertices) throw OutOfRange();
-        if (v2 < 1 || v2 > n_vertices) throw OutOfRange();
-        assert ( std::none_of(adj_list[v1-1].begin(), adj_list[v1-1].end(), [v2](unsigned int i){ return i == v2; }) && "Edge already exists. No self-loops allowed.");
-        adj_list[v1-1].push_back(v2);
-    }
-};
-
 // run BFS algorithm
-std::vector<int> bfs(Graph& graph, unsigned int source_vertex){
+std::vector<int> bfs(dsa::Graph& graph, unsigned int source_vertex){
     unsigned int n_vertices = graph.get_n_vertices();
     std::vector<std::vector<unsigned int>> adj_list = graph.get_adj_list();
     
@@ -150,7 +86,7 @@ int main(){
             // initialise graph
             // /////////////////////////////////////////////////////////////////////////
             
-            Graph_Undirected graph(n_vertices);
+            dsa::Graph_Undirected graph(n_vertices);
             
             // input all edges into adjacency list of graph
             for (unsigned int idx_edges = 1; idx_edges <= n_edges; ++idx_edges){

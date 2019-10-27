@@ -2,8 +2,8 @@
  * list of exceptions that can be thrown in case of run-time errors
  */
 
-#ifndef EXCEPTIONS
-#define EXCEPTIONS
+#ifndef EXCEPTIONS_H
+#define EXCEPTIONS_H
 #pragma once
 
 class MyException{};

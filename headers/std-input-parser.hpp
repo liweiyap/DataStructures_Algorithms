@@ -2,11 +2,11 @@
  * list of functions for parsing/properly interpreting inputs from standard input
  */
 
-#ifndef STD_INPUT_PARSER
-#define STD_INPUT_PARSER
+#ifndef STD_INPUT_PARSER_H
+#define STD_INPUT_PARSER_H
 #pragma once
 
-#ifndef EXCEPTIONS
+#ifndef EXCEPTIONS_H
 #include "exceptions.hpp"
 #endif
 
@@ -37,7 +37,8 @@ namespace dsa{
      * @throws Underflow() exception thrown if integer is smaller than 0
      */
     unsigned int parseDigitsUnsigned();
-}
+
+}  // end of namespace dsa
 
 
 #endif

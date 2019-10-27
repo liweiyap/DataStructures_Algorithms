@@ -9,8 +9,8 @@
 #endif
  */
 
-#ifndef NODE_SQ
-#define NODE_SQ
+#ifndef NODE_SQ_H
+#define NODE_SQ_H
 #pragma once
 
 #include <memory>     // shared_ptr
@@ -20,9 +20,9 @@
 namespace dsa{
 
     /**
-     * Node object acts as building block for larger Stack object.
+     * Node object acts as building block for larger Stack or Queue object.
      * Each Node contains two attributes: its own value of datatype T and a pointer
-     * that points either to NULL or the next Node in the same Stack.
+     * that points either to NULL or the next Node in the same Stack or Queue.
      */
     template<typename T>
     struct Node{

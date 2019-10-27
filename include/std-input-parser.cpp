@@ -9,7 +9,7 @@
 #endif
  */
 
-#ifndef STD_INPUT_PARSER
+#ifndef STD_INPUT_PARSER_H
 #include "std-input-parser.hpp"
 #endif
 

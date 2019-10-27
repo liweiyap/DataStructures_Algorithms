@@ -6,7 +6,7 @@
 #define STACK_H
 #pragma once
 
-#ifndef NODE_SQ
+#ifndef NODE_SQ_H
 #include "node-sq.hpp"
 #endif
 

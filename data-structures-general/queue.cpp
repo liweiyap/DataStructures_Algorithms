@@ -25,7 +25,7 @@ dsa::Queue<T>::Queue(): first(0), last(0), n_nodes(0){}
 template<typename T>
 dsa::Queue<T>::Queue(T v): first(std::make_shared<Node<T>>(v)), n_nodes(1){
     last = first;
-}
+}  // end of constructor
 
 /**
  * Create new Node storing value of datatype T.
