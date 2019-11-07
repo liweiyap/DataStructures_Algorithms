@@ -3,13 +3,15 @@
 #include <utility>  // move
 #include <ostream>
 #include <cassert>
+#include <string>
 
+template <typename T>
 struct BSTNode{
-    BSTNode(int v): value(v){
+    BSTNode(T v): value(v){
         ++n_nodes;
     }
     
-    BSTNode(int v, std::unique_ptr<BSTNode> l, std::unique_ptr<BSTNode> r): value(v), left(std::move(l)), right(std::move(r)){
+    BSTNode(T v, std::unique_ptr<BSTNode<T>> l, std::unique_ptr<BSTNode<T>> r): value(v), left(std::move(l)), right(std::move(r)){
         ++n_nodes;
     }
     
@@ -24,21 +26,23 @@ struct BSTNode{
         --n_nodes;
     }
     
-    int value;
-    std::unique_ptr<BSTNode> left;
-    std::unique_ptr<BSTNode> right;
+    T value;
+    std::unique_ptr<BSTNode<T>> left;
+    std::unique_ptr<BSTNode<T>> right;
 };
 
-int BSTNode::n_nodes = 0;
+template <typename T>
+int BSTNode<T>::n_nodes = 0;
 
+template <typename T>
 class BSTree{
 public:
     BSTree(){}
     
-    BSTree(const int v): root(std::make_unique<BSTNode>(v)){}
+    BSTree(const T v): root(std::make_unique<BSTNode<T>>(v)){}
     
-    bool search(int v){
-        BSTNode* node = root.get();
+    bool search(const T v){
+        BSTNode<T>* node = root.get();
         while (node && v != node->value){  // while (node != 0)
             if (v < node->value){
                 node = node->left.get();
@@ -50,9 +54,9 @@ public:
         return false;
     }
     
-    bool insert(const int v){
-        int old_node_count = BSTNode::n_nodes;
-        std::unique_ptr<BSTNode>* node = &root;
+    bool insert(const T v){
+        int old_node_count = BSTNode<T>::n_nodes;
+        std::unique_ptr<BSTNode<T>>* node = &root;
         while (*node){
             if (v == (*node)->value){
                 return false;
@@ -63,28 +67,28 @@ public:
                 node = &(*node)->right;
             }
         }
-        *node = std::make_unique<BSTNode>(v);
-        int new_node_count = BSTNode::n_nodes;
+        *node = std::make_unique<BSTNode<T>>(v);
+        int new_node_count = BSTNode<T>::n_nodes;
         assert(new_node_count == old_node_count + 1);
         return true;
     }
     
-    std::unique_ptr<BSTNode>* min_node(std::unique_ptr<BSTNode>& node){
-        std::unique_ptr<BSTNode>* walk = &node;
+    std::unique_ptr<BSTNode<T>>* min_node(std::unique_ptr<BSTNode<T>>& node){
+        std::unique_ptr<BSTNode<T>>* walk = &node;
         while ((*walk)->left){
             walk = &(*walk)->left;
         }
         return walk;
     }
     
-    std::unique_ptr<BSTNode>* symm_succ(std::unique_ptr<BSTNode>& node){
+    std::unique_ptr<BSTNode<T>>* symm_succ(std::unique_ptr<BSTNode<T>>& node){
         return min_node(node->right);
     }
     
-    bool remove(const int v){
-        int old_node_count = BSTNode::n_nodes;
+    bool remove(const T v){
+        int old_node_count = BSTNode<T>::n_nodes;
         int new_node_count;
-        std::unique_ptr<BSTNode>* node = &root;
+        std::unique_ptr<BSTNode<T>>* node = &root;
         while (*node){
             if (v == (*node)->value){
                 if (!(*node)->left){
@@ -92,8 +96,8 @@ public:
                 } else if (!(*node)->right){
                     *node = std::move((*node)->left);
                 } else{
-                    std::unique_ptr<BSTNode>* ss = symm_succ(*node);
-                    std::unique_ptr<BSTNode>* ss_parent = getParent((*ss)->value);
+                    std::unique_ptr<BSTNode<T>>* ss = symm_succ(*node);
+                    std::unique_ptr<BSTNode<T>>* ss_parent = getParent((*ss)->value);
                     (*node)->value = (*ss)->value;
                     if ((*ss_parent)->right && (*ss_parent)->right->value == (*ss)->value){
                         if ((*ss)->right){
@@ -109,7 +113,7 @@ public:
                         }
                     }
                 }
-                new_node_count = BSTNode::n_nodes;
+                new_node_count = BSTNode<T>::n_nodes;
                 assert(new_node_count == old_node_count - 1);
                 return true;
             } else if (v < (*node)->value){
@@ -118,12 +122,12 @@ public:
                 node = &(*node)->right;
             }
         }
-        new_node_count = BSTNode::n_nodes;
+        new_node_count = BSTNode<T>::n_nodes;
         assert(new_node_count == old_node_count);
         return false;
     }
     
-    void traverse_in_order(std::unique_ptr<BSTNode>& node){
+    void traverse_in_order(std::unique_ptr<BSTNode<T>>& node){
         if (node){
             traverse_in_order(node->left);
             node->print_value(std::cout);
@@ -136,8 +140,8 @@ public:
         std::cout << "\n";
     }
     
-    std::unique_ptr<BSTNode>* getParent(const int v){
-        std::unique_ptr<BSTNode>* parent = &root;
+    std::unique_ptr<BSTNode<T>>* getParent(const T v){
+        std::unique_ptr<BSTNode<T>>* parent = &root;
         while (*parent){
             if ((*parent)->left && v == (*parent)->left->value){
                 return parent;
@@ -164,7 +168,7 @@ public:
         return os;
     }
     
-    std::ostream& print(std::ostream& os, std::unique_ptr<BSTNode>& node, const int h){
+    std::ostream& print(std::ostream& os, std::unique_ptr<BSTNode<T>>& node, const int h){
         if (node){
             print(os, node->right, h+1);
             spaces(os, h);
@@ -179,11 +183,12 @@ public:
     }
     
 private:
-    std::unique_ptr<BSTNode> root;
+    std::unique_ptr<BSTNode<T>> root;
 };
 
 int main(){
-    BSTree test;
+//    BSTree<int> test;
+    BSTree<std::string> test;
 //    test.insert(16);
 //    test.insert(24);
 //    test.insert(8);
@@ -216,24 +221,32 @@ int main(){
 //    test.insert(3);
 //    test.insert(1);
     
-    test.insert(4);
-    test.insert(2);
-    test.insert(6);
-    test.insert(1);
-    test.insert(3);
-    test.insert(5);
-    test.insert(9);
-    test.insert(7);
-    test.insert(8);
-    test.insert(11);
-    test.insert(10);
+//    test.insert(4);
+//    test.insert(2);
+//    test.insert(6);
+//    test.insert(1);
+//    test.insert(3);
+//    test.insert(5);
+//    test.insert(9);
+//    test.insert(7);
+//    test.insert(8);
+//    test.insert(11);
+//    test.insert(10);
+    
+    test.insert("epsilon");
+    test.insert("gamma");
+    test.insert("beta");
+    test.insert("delta");
+    test.insert("alpha");
+    test.insert("mu");
+    test.insert("kappa");
     
     test.traverse_in_order();
-    std::cout << test.search(6) << "\n";
-    std::cout << test.search(10) << "\n";
+    std::cout << test.search("zeta") << "\n";
+    std::cout << test.search("kappa") << "\n";
     test.traverse_in_order();
     test.print(std::cout);
-    std::cout << BSTNode::n_nodes << "\n";
+    std::cout << BSTNode<std::string>::n_nodes << "\n";
 //    for (int i = 0; i <= 12; ++i){
 //        if (!test.getParent(i)){
 //            std::cout << "parent of " << i << " is not found\n";
@@ -241,11 +254,10 @@ int main(){
 //            std::cout << "parent of " << i << " is " << (*test.getParent(i))->value << "\n";
 //        }
 //    }
-    std::cout << test.remove(12) << "\n";
-    std::cout << test.remove(9) << "\n";
+    std::cout << test.remove("beta") << "\n";
     test.traverse_in_order();
     test.print(std::cout);
-    std::cout << BSTNode::n_nodes << "\n";
+    std::cout << BSTNode<std::string>::n_nodes << "\n";
     
     return 0;
 }
