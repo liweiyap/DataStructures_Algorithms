@@ -211,7 +211,7 @@ bool dsa::BSTree<T>::remove(const T v){
  * @param node reference of pointer to input node
  */
 template <typename T>
-void dsa::BSTree<T>::traverse_in_order(std::unique_ptr<dsa::BSTNode<T>>& node){
+void dsa::BSTree<T>::traverse_in_order(const std::unique_ptr<dsa::BSTNode<T>>& node){
     if (node){
         traverse_in_order(node->left);
         node->print_value(std::cout);
@@ -257,7 +257,7 @@ std::unique_ptr<dsa::BSTNode<T>>* dsa::BSTree<T>::min_node(std::unique_ptr<dsa::
  * @return pointer to pointer of symmetric successor
  */
 template <typename T>
-std::unique_ptr<dsa::BSTNode<T>>* dsa::BSTree<T>::symm_succ(std::unique_ptr<dsa::BSTNode<T>>& node){
+std::unique_ptr<dsa::BSTNode<T>>* dsa::BSTree<T>::symm_succ(const std::unique_ptr<dsa::BSTNode<T>>& node){
     return min_node(node->right);
 }  // end of symm_succ function
 
@@ -327,7 +327,7 @@ std::ostream& dsa::BSTree<T>::spaces(std::ostream& os, const int h){
  * @return output stream
  */
 template <typename T>
-std::ostream& dsa::BSTree<T>::print(std::ostream& os, std::unique_ptr<dsa::BSTNode<T>>& node, const int h){
+std::ostream& dsa::BSTree<T>::print(std::ostream& os, const std::unique_ptr<dsa::BSTNode<T>>& node, const int h){
     if (node){
         print(os, node->right, h+1);
         spaces(os, h);
@@ -347,7 +347,34 @@ std::ostream& dsa::BSTree<T>::print(std::ostream& os, std::unique_ptr<dsa::BSTNo
 template <typename T>
 std::ostream& dsa::BSTree<T>::print(std::ostream& os){
     return print(os, root, 0);
-}
+}  // end of overloaded print function
+
+
+/**
+ * Return height of sub-tree rooted at input node
+ *
+ * @param node reference of pointer to input node
+ * @return height of sub-tree rooted at input node
+ */
+template <typename T>
+int dsa::BSTree<T>::height(const std::unique_ptr<dsa::BSTNode<T>>& node){
+    if (!node) return 0;
+    int hL = -1; int hR = -1;
+    if (node->left) hL = height(node->left);
+    if (node->right) hR = height(node->right);
+    return std::max(hL, hR) + 1;
+}  // end of height function
+
+
+/**
+ * Return height of BST
+ *
+ * @return height of BST
+ */
+template <typename T>
+int dsa::BSTree<T>::height(){
+    return height(root);
+}  // end of overloaded height function
 
 
 /**
@@ -359,7 +386,7 @@ template <typename T>
 int dsa::BSTree<T>::get_n_nodes(){
     assert(n_nodes >= 0);
     return n_nodes;
-}
+}  // end of get_n_nodes function
 
 
 /**
@@ -369,7 +396,7 @@ template <typename T>
 void dsa::BSTree<T>::clear(){
     root.reset();
     n_nodes = 0;
-}
+}  // end of clear function
 
 
 // explicit template instantiations

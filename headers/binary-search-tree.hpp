@@ -47,7 +47,7 @@ namespace dsa{
         
         
         // Traverse sub-tree rooted at input node in order
-        void traverse_in_order(std::unique_ptr<dsa::BSTNode<T>>& node);
+        void traverse_in_order(const std::unique_ptr<dsa::BSTNode<T>>& node);
         
         
         // Traverse the whole tree in order
@@ -60,7 +60,7 @@ namespace dsa{
         
         // Return pointer to pointer of symmetric successor of input node
         // (i.e. node with minimum value in sub-tree rooted at right child of input node)
-        std::unique_ptr<dsa::BSTNode<T>>* symm_succ(std::unique_ptr<dsa::BSTNode<T>>& node);
+        std::unique_ptr<dsa::BSTNode<T>>* symm_succ(const std::unique_ptr<dsa::BSTNode<T>>& node);
         
         
         // Return pointer to pointer of parent of node with given value
@@ -72,11 +72,19 @@ namespace dsa{
         
         
         // Vertically print sub-tree rooted at given node
-        std::ostream& print(std::ostream& os, std::unique_ptr<dsa::BSTNode<T>>& node, const int h);
+        std::ostream& print(std::ostream& os, const std::unique_ptr<dsa::BSTNode<T>>& node, const int h);
         
         
         // Vertically print entire BST
         std::ostream& print(std::ostream& os);
+        
+        
+        // Return height of sub-tree rooted at input node
+        int height(const std::unique_ptr<dsa::BSTNode<T>>& node);
+        
+        
+        // Return height of BST
+        int height();
         
         
         // Return number of nodes in BST

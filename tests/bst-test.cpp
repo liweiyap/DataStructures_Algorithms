@@ -18,7 +18,7 @@ int main(){
         std::cout << *it << ",";
         intTree1.insert(*it);
     }
-    std::cout << "\n\nTree with " << intTree1.get_n_nodes() << " nodes created.\n\n";
+    std::cout << "\n\nTree with " << intTree1.get_n_nodes() << " nodes and height " << intTree1.height() << " created.\n\n";
     std::cout << "In-order Traversal:\n";
     intTree1.traverse_in_order();
     std::cout << "\nPrinting overall tree structure:\n";
@@ -37,35 +37,35 @@ int main(){
     }
     std::cout << "\nRemoving value 4 from tree:\n";
     intTree1.remove(4);
-    std::cout << "Tree now has " << intTree1.get_n_nodes() << " nodes.\n\n";
+    std::cout << "Tree now has " << intTree1.get_n_nodes() << " nodes and height " << intTree1.height() << ".\n\n";
     std::cout << "In-order Traversal:\n";
     intTree1.traverse_in_order();
     std::cout << "\nPrinting overall tree structure:\n";
     intTree1.print(std::cout);
     std::cout << "\nRemoving value 9 from tree:\n";
     intTree1.remove(9);
-    std::cout << "Tree now has " << intTree1.get_n_nodes() << " nodes.\n\n";
+    std::cout << "Tree now has " << intTree1.get_n_nodes() << " nodes and height " << intTree1.height() << ".\n\n";
     std::cout << "In-order Traversal:\n";
     intTree1.traverse_in_order();
     std::cout << "\nPrinting overall tree structure:\n";
     intTree1.print(std::cout);
     std::cout << "\nRemoving value 1 from tree:\n";
     intTree1.remove(1);
-    std::cout << "Tree now has " << intTree1.get_n_nodes() << " nodes.\n\n";
+    std::cout << "Tree now has " << intTree1.get_n_nodes() << " nodes and height " << intTree1.height() << ".\n\n";
     std::cout << "In-order Traversal:\n";
     intTree1.traverse_in_order();
     std::cout << "\nPrinting overall tree structure:\n";
     intTree1.print(std::cout);
     std::cout << "\nInserting value 4 back into tree:\n";
     intTree1.insert(4);
-    std::cout << "Tree now has " << intTree1.get_n_nodes() << " nodes.\n\n";
+    std::cout << "Tree now has " << intTree1.get_n_nodes() << " nodes and height " << intTree1.height() << ".\n\n";
     std::cout << "In-order Traversal:\n";
     intTree1.traverse_in_order();
     std::cout << "\nPrinting overall tree structure:\n";
     intTree1.print(std::cout);
     std::cout << "\nInserting value 9 back into tree:\n";
     intTree1.insert(9);
-    std::cout << "Tree now has " << intTree1.get_n_nodes() << " nodes.\n\n";
+    std::cout << "Tree now has " << intTree1.get_n_nodes() << " nodes and height " << intTree1.height() << ".\n\n";
     std::cout << "In-order Traversal:\n";
     intTree1.traverse_in_order();
     std::cout << "\nPrinting overall tree structure:\n";
@@ -83,14 +83,14 @@ int main(){
         std::cout << *it << ",";
         intTree2.insert(*it);
     }
-    std::cout << "\n\nTree with " << intTree2.get_n_nodes() << " nodes created.\n\n";
+    std::cout << "\n\nTree with " << intTree2.get_n_nodes() << " nodes and height " << intTree2.height() << " created.\n\n";
     std::cout << "In-order Traversal:\n";
     intTree2.traverse_in_order();
     std::cout << "\nPrinting overall tree structure:\n";
     intTree2.print(std::cout);
     std::cout << "\nRemoving value 6 from tree:\n";
     intTree2.remove(6);
-    std::cout << "Tree now has " << intTree2.get_n_nodes() << " nodes.\n\n";
+    std::cout << "Tree now has " << intTree2.get_n_nodes() << " nodes and height " << intTree2.height() << ".\n\n";
     std::cout << "In-order Traversal:\n";
     intTree2.traverse_in_order();
     std::cout << "\nPrinting overall tree structure:\n";
@@ -99,14 +99,14 @@ int main(){
     intTree2.remove(25);
     intTree2.remove(26);
     intTree2.remove(27);
-    std::cout << "Tree now has " << intTree2.get_n_nodes() << " nodes.\n\n";
+    std::cout << "Tree now has " << intTree2.get_n_nodes() << " nodes and height " << intTree2.height() << ".\n\n";
     std::cout << "In-order Traversal:\n";
     intTree2.traverse_in_order();
     std::cout << "\nPrinting overall tree structure:\n";
     intTree2.print(std::cout);
     std::cout << "\nRemoving value 28 from tree:\n";
     intTree2.remove(28);
-    std::cout << "Tree now has " << intTree2.get_n_nodes() << " nodes.\n\n";
+    std::cout << "Tree now has " << intTree2.get_n_nodes() << " nodes and height " << intTree2.height() << ".\n\n";
     std::cout << "In-order Traversal:\n";
     intTree2.traverse_in_order();
     std::cout << "\nPrinting overall tree structure:\n";
@@ -124,7 +124,7 @@ int main(){
         std::cout << *it << ",";
         strTree1.insert(*it);
     }
-    std::cout << "\n\nTree with " << strTree1.get_n_nodes() << " nodes created.\n\n";
+    std::cout << "\n\nTree with " << strTree1.get_n_nodes() << " nodes and height " << strTree1.height() << " created.\n\n";
     std::cout << "In-order Traversal:\n";
     strTree1.traverse_in_order();
     std::cout << "\nPrinting overall tree structure:\n";
@@ -143,14 +143,14 @@ int main(){
     }
     std::cout << "\nRemoving value beta from tree:\n";
     strTree1.remove("beta");
-    std::cout << "Tree now has " << strTree1.get_n_nodes() << " nodes.\n\n";
+    std::cout << "Tree now has " << strTree1.get_n_nodes() << " nodes and height " << strTree1.height() << ".\n\n";
     std::cout << "In-order Traversal:\n";
     strTree1.traverse_in_order();
     std::cout << "\nPrinting overall tree structure:\n";
     strTree1.print(std::cout);
     std::cout << "\nRemoving all values from tree:\n";
     strTree1.clear();
-    std::cout << "Tree now has " << strTree1.get_n_nodes() << " nodes.\n\n";
+    std::cout << "Tree now has " << strTree1.get_n_nodes() << " nodes and height " << strTree1.height() << ".\n\n";
     std::cout << "In-order Traversal doesn't yield anything:\n";
     strTree1.traverse_in_order();
     std::cout << "Printing doesn't yield anything:\n\n";
