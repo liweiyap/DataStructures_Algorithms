@@ -4,6 +4,7 @@ set(DSGENLIBS
     stack
     queue
     graph
+    binary-search-tree
 )
 
 foreach(DSGENLIB ${DSGENLIBS})

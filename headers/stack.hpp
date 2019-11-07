@@ -16,7 +16,7 @@
 namespace dsa{
     
     /**
-     * LIFO object used to simulate a virtual CPU.
+     * LIFO object.
      */
     template<typename T>
     class Stack{

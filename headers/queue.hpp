@@ -16,7 +16,7 @@
 namespace dsa{
     
     /**
-     * FIFO object used to simulate a virtual CPU.
+     * FIFO object.
      */
     template<typename T>
     class Queue{
