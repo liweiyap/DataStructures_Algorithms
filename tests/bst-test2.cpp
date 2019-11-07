@@ -51,6 +51,7 @@ public:
     }
     
     bool insert(const int v){
+        int old_node_count = BSTNode::n_nodes;
         std::unique_ptr<BSTNode>* node = &root;
         while (*node){
             if (v == (*node)->value){
@@ -63,37 +64,33 @@ public:
             }
         }
         *node = std::make_unique<BSTNode>(v);
+        int new_node_count = BSTNode::n_nodes;
+        assert(new_node_count == old_node_count + 1);
         return true;
     }
     
-    BSTNode* min_node(){
-        BSTNode* node = root.get();
-        while (node->left){
-            node = node->left.get();
+    std::unique_ptr<BSTNode>* min_node(std::unique_ptr<BSTNode>& node){
+        std::unique_ptr<BSTNode>* walk = &node;
+        while ((*walk)->left){
+            walk = &(*walk)->left;
         }
-        return node;
+        return walk;
     }
     
     std::unique_ptr<BSTNode>* symm_succ(std::unique_ptr<BSTNode>& node){
-        std::unique_ptr<BSTNode>* w = &node->right;
-        std::unique_ptr<BSTNode>* x = &(*w)->left;
-        while (*x){
-            w = x;
-            x = &(*x)->left;
-        }
-        return w;
+        return min_node(node->right);
     }
     
     bool remove(const int v){
+        int old_node_count = BSTNode::n_nodes;
+        int new_node_count;
         std::unique_ptr<BSTNode>* node = &root;
         while (*node){
             if (v == (*node)->value){
                 if (!(*node)->left){
                     *node = std::move((*node)->right);
-                    return true;
                 } else if (!(*node)->right){
                     *node = std::move((*node)->left);
-                    return true;
                 } else{
                     std::unique_ptr<BSTNode>* ss = symm_succ(*node);
                     std::unique_ptr<BSTNode>* ss_parent = getParent((*ss)->value);
@@ -111,14 +108,18 @@ public:
                             (*ss_parent)->left.reset();
                         }
                     }
-                    return true;
                 }
+                new_node_count = BSTNode::n_nodes;
+                assert(new_node_count == old_node_count - 1);
+                return true;
             } else if (v < (*node)->value){
                 node = &(*node)->left;
             } else{
                 node = &(*node)->right;
             }
         }
+        new_node_count = BSTNode::n_nodes;
+        assert(new_node_count == old_node_count);
         return false;
     }
     
@@ -230,8 +231,6 @@ int main(){
     test.traverse_in_order();
     std::cout << test.search(6) << "\n";
     std::cout << test.search(10) << "\n";
-    BSTNode* node = test.min_node();
-    std::cout << node->value << "\n";
     test.traverse_in_order();
     test.print(std::cout);
     std::cout << BSTNode::n_nodes << "\n";
