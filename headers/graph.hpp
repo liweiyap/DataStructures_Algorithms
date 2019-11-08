@@ -56,7 +56,7 @@ namespace dsa{
         Graph_Undirected(unsigned int n);
         
         // add edge between two vertices by updating adjacency list
-        void add_edge(unsigned int v1, unsigned int v2);
+        void add_edge(unsigned int v1, unsigned int v2) override;
         
     };  // end of Graph_Undirected derived class declaration
     
@@ -70,7 +70,7 @@ namespace dsa{
         Graph_Directed(unsigned int n);
         
         // add edge between two vertices by updating adjacency list
-        void add_edge(unsigned int v1, unsigned int v2);
+        void add_edge(unsigned int v1, unsigned int v2) override;
         
     };  // end of Graph_Directed derived class declaration
     
